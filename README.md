@@ -18,7 +18,7 @@ Is mandatory mount a permanent volume for directory /var/lib/rancid, in this dir
 
 
 
-#Steps after deploy container
+# Steps after deploy container
 
 It's most important execute the next instructions with the user rancid.
 
