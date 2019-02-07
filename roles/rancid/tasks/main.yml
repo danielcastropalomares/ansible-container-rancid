@@ -1,0 +1,61 @@
+---
+# https://networklore.com/rancid-getting-started/
+- name: Upgrade all packages to last version
+  apt: upgrade=yes update_cache=yes
+
+- name: Install packages rancid, cvsweb, apache2, python_passlib 
+  apt: name={{ item }} state=latest update_cache=yes 
+  with_items:
+          - rancid
+          - cvsweb
+          - apache2
+          - python-passlib
+
+- name: create grup rancid
+  group:
+    name: rancid
+    state: present
+
+- name: create user rancid
+  user:
+    name: rancid
+    password:
+    groups: 
+      - rancid
+    state: present
+    shell: /bin/bash
+    system: no
+    createhome: no
+    home: /var/lib/rancid/
+
+- name: link icons cvsweb
+  file:
+    src: /usr/share/cvsweb
+    dest: /var/www/html/cvsweb 
+    state: link
+
+- name: enable apache2 module cgi
+  command: a2enmod cgid creates=/etc/apache2/mods-enabled/cgid.load
+  notify: restart apache
+
+- name: change permisions logs rancid
+  file:
+    dest: /var/log/rancid/
+    owner: rancid
+    group: rancid
+
+- name: copy files 
+  template:
+    src: "{{ item.src }}" 
+    dest: "{{ item.dest }}" 
+    mode: "{{ item.mode }}"
+  with_items:
+    - { src: 'etc/cvsweb/cvsweb.conf',dest: '/etc/cvsweb/cvsweb.conf', mode: '644'}
+    - { src: 'etc/rancid/rancid.conf',dest: '/etc/rancid/rancid.conf', mode: '644'}
+    - { src: 'etc/cron.d/rancid',dest: '/etc/cron.d/rancid', mode: '644'}
+    - { src: 'usr/share/perl5/rancid/ciscowlc.pm',dest: '/usr/share/perl5/rancid/ciscowlc.pm', mode: '644'}
+    - { src: 'etc/rancid/rancid.types.base',dest: '/etc/rancid/rancid.types.base', mode: '644'}
+    - { src: 'docker-entrypoint.sh',dest: '/usr/local/sbin/docker-entrypoint.sh', mode: '700'}
+
+- name: delete file install
+  shell: rm -rf /var/lib/apt/lists/* 
