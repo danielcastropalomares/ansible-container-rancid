@@ -6,7 +6,7 @@ ansible-build
 
 Now you can start a docker with the next options:
 ```
-docker run --name test10 -v /tmp/test10:/var/lib/rancid -e RANCID_GROUPS="bcn mad" -p 4444:443 -d ansible-container-rancid-web:last
+docker run --name test10 -v /tmp/test10:/var/lib/rancid -e RANCID_GROUPS="bcn mad" -p 4444:443 -e htaccess_user=admin -e htaccess_pw=1234 -d ansible-container-rancid-web:last
 ```
 
 The backup is excecuted every night 3:00 o'clock via cron:
