@@ -9,7 +9,6 @@
           - rancid
           - cvsweb
           - apache2
-          - python-passlib
 
 - name: create grup rancid
   group:

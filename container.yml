@@ -1,25 +1,29 @@
 version: "2"
 settings:
   conductor:
-    base: ubuntu:xenial
+     base: ubuntu:xenial 
   project_name: ansible-container-rancid
 services: 
   web:
      from: "phusion/baseimage"
      container_name: rancid-custom 
      ports:
-        #- "8080:80"
         - "4443:443"
      roles:
         - rancid
         - ssl
+        - role: htaccess
+          htaccess_name: rancid
+          htpasswd_path: /var/lib/rancid/CVS
      volumes:
         - /var/lib/rancid
-     #command: ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
      command: ["docker-entrypoint.sh"]
      environment:
-        - RANCID_GROUPS="sevilla madrid" 
      #This variable is defined inside rancid.conf LIST_OF_GROUPS
+        - RANCID_GROUPS="sevilla madrid" 
+        - htaccess_user=admin
+        - htaccess_pw=1234
+        - htpasswd_path=/var/lib/rancid/CVS
      #
 registries: {}
   # Add optional registries used for deployment. For example:
