@@ -22,4 +22,5 @@ done
 echo "Create the file .htpasswd on  $htpasswd_path"
 /usr/bin/htpasswd -b -c $htpasswd_path/.htpasswd $htaccess_user $htaccess_pw 
 /usr/sbin/cron -f &
+/bin/rm -f /usr/local/apache2/logs/httpd.pid
 /usr/sbin/apache2ctl -D FOREGROUND
