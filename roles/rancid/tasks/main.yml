@@ -9,6 +9,7 @@
           - rancid
           - cvsweb
           - apache2
+          - telnet
 
 - name: create grup rancid
   group:
